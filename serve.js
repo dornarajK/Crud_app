@@ -1,14 +1,14 @@
-const express= require('express')
-const dotenv= require('dotenv')
-const morgan = require('morgan')
-const bodyparser= require('body-parser')
+const express = require('express');
+const dotenv = require('dotenv');
+const morgan = require('morgan');
+const bodyparser = require('body-parser');
 const path = require('path');
-const cors = require('cors'); 
-const connectDB= require('./server/database/connection')
+const cors = require('cors');
+const connectDB = require('./server/database/connection');
 
-dotenv.config({path:'config.env'})
-const app=express()
-const PORT = process.env.PORT || 8080
+dotenv.config({ path: 'config.env' });
+const app = express();
+const PORT = process.env.PORT || 8080;
 
 // Middleware setup
 app.use(cors({
@@ -17,30 +17,27 @@ app.use(cors({
     allowedHeaders: 'Content-Type,Authorization'
 }));
 
+// Log requests
+app.use(morgan('tiny'));
 
+// MongoDB connection
+connectDB();
 
-//* log request
-app.use(morgan('tiny'))
+// Parse request to body-parser
+app.use(bodyparser.urlencoded({ extended: true }));
 
-//* mongodb connection
-connectDB()
+// Set view engine
+app.set('view engine', 'ejs');
+// app.set('views', path.resolve(__dirname, "views"));
 
-// * parse request to body-parser
-app.use(bodyparser.urlencoded({extended:true}))
+// Load assets
+app.use('/css', express.static(path.resolve(__dirname, 'assets/css')));
+app.use('/img', express.static(path.resolve(__dirname, 'assets/img')));
+app.use('/js', express.static(path.resolve(__dirname, 'assets/js')));
 
-//*set vew engine
-app.set('view engine','ejs')
-// app.set('views',path.resolve(__dirname,"views"))
+// Load routers
+app.use('/', require('./server/routes/router'));
 
-// *load assets
-
-app.use('/css',express.static(path.resolve(__dirname,'assets/css')))
-app.use('/img',express.static(path.resolve(__dirname,'assets/img')))
-app.use('/js',express.static(path.resolve(__dirname,'assets/js')))
-
-
-
-//* load routers
-app.use('/',require('./server/routes/router'))
-
-app.listen(PORT, () => {console.log(`server is running http://localhost:${PORT}`)})
+app.listen(PORT, () => { 
+    console.log(`Server is running at http://localhost:${PORT}`);
+});
