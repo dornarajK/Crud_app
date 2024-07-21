@@ -14,20 +14,19 @@ exports.create=(req,res)=>{
         name:req.body.name,
         email:req.body.email,
         gender:req.body.gender,
-        status:req.body.status
+      
+        status: req.body.status 
     })
 
     //*save usere in the database
 
-    user
-    .save(user)
-    .then(data=>{
+    user.save(user).then(data=>{
             //res.send(data)
             res.redirect('/add-user')
         })
         .catch(err =>{
             res.status(500).send({
-                message:err.message||'Some error occurred while creating a create operation'
+                message: err.message||'Some error occurred while creating a create operation'
             })
         })
 
