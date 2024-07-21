@@ -11,11 +11,15 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 // Middleware setup
-app.use(cors({
-    origin: 'https://your-allowed-origin.com',
+const corsOptions = {
+    origin: '*', 
     methods: 'GET,POST,PUT,DELETE',
     allowedHeaders: 'Content-Type,Authorization'
-}));
+};
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Pre-flight request handler
+
+
 
 // Log requests
 app.use(morgan('tiny'));
@@ -35,7 +39,6 @@ app.use('/css', (req, res, next) => {
     res.setHeader('Content-Type', 'text/css');
     express.static(path.resolve(__dirname, 'assets/css'))(req, res, next);
 });
-
 app.use('/img', express.static(path.resolve(__dirname, 'assets/img')));
 app.use('/js', express.static(path.resolve(__dirname, 'assets/js')));
 

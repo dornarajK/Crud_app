@@ -16,7 +16,7 @@ $(document).ready(function () {
         });
 
         var request = {
-            "url": `http://localhost:3000/api/users/${data.id}`,
+            "url": `/api/users/${data.id}`, // Use relative URL
             "method": "PUT",
             "data": data
         };
@@ -32,7 +32,7 @@ $(document).ready(function () {
             var id = $(this).attr('data-id');
 
             var request = {
-                "url": `http://localhost:3000/api/users/${id}`,
+                "url": `/api/users/${id}`, // Use relative URL
                 "method": "DELETE"
             };
 
