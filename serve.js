@@ -31,7 +31,11 @@ app.set('view engine', 'ejs');
 // app.set('views', path.resolve(__dirname, "views"));
 
 // Load assets
-app.use('/css', express.static(path.resolve(__dirname, 'assets/css')));
+app.use('/css', (req, res, next) => {
+    res.setHeader('Content-Type', 'text/css');
+    express.static(path.resolve(__dirname, 'assets/css'))(req, res, next);
+});
+
 app.use('/img', express.static(path.resolve(__dirname, 'assets/img')));
 app.use('/js', express.static(path.resolve(__dirname, 'assets/js')));
 
